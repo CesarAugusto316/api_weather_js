@@ -1,3 +1,4 @@
+import './WeatherModel';
 import { Controller } from './Controller';
 
 

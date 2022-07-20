@@ -116,7 +116,7 @@ a {
   /* transform: translate(-50%, -50%); */
   -webkit-animation: rotate-center 0.8s ease-out infinite both;
   animation: rotate-center 0.8s ease-out infinite both;
-  opacity: 0.5;
+  opacity: 0.27;
 }
 
 /*─────────────────────────────────────

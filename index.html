@@ -24,9 +24,9 @@
       </div>
 
       <h1 class="navbar__heading">
-        <i class="fa-solid fa-temperature-arrow-down"></i>
+        <i class="fa-solid fa-temperature-half"></i>
         <span>App Del Clima </span>
-        <i class="fa-solid fa-temperature-arrow-up"></i>
+        <i class="fa-solid fa-temperature-empty"></i>
       </h1>
 
       <div class="navbar__countries">
@@ -36,7 +36,11 @@
     </nav>
 
     <main class="section px-6 py-5">
-      <div id="map"></div>
+      <div id="map">
+        <div class="spinner-container">
+          <i class="fa-solid fa-circle-notch icon--spiner font-7"></i>
+        </div>
+      </div>
 
       <div class="form-container">
         <form class="form">
@@ -63,6 +67,9 @@
         </form>
 
         <div class="weather-data-card">
+          <div class="spinner-container">
+            <i class="fa-solid fa-circle-notch icon--spiner font-4"></i>
+          </div>
           <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, saepe
           corporis! Rerum corrupti quo nemo assumenda nesciunt? Suscipit,
           temporibus non, nihil nostrum nulla sed rem, exercitationem eum

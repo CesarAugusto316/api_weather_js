@@ -20,48 +20,52 @@ export class View {
    * every subclass should implement its own way to
    * generate markup, and store the result in this._markup
    */
-  _generateMarkup() {}
+  generateMarkup() {}
 
   /**
    *
    * @description once _generateMarkup executes, it must store
    * the result in this._markup before calling this method.
    */
-  _render() {
+  renderMarkup() {
     this._parentElement.innerHTML = this._markup;
+    return this;
   }
 
   /**
    *
    * @param {string} htmlMarkup
    */
-  _updateView(htmlMarkup) {
+  updateView(htmlMarkup) {
     this.markup = htmlMarkup;
     this._parentElement.innerHTML = this._markup;
+    return this;
   }
 
   /**
    *
    * @param {string} fontSize
    */
-  _showSpinner(fontSize = 'font-5') {
+  showSpinner(fontSize = 'font-4') {
     const spinnerMarkup = `
     <div class="spinner-container">
       <i class="fa-solid fa-circle-notch icon--spiner ${fontSize}"></i>
     </div>
     `;
     this._parentElement.innerHTML = spinnerMarkup;
+    return this;
   }
 
-  _clearView() {
+  clearSpinner() {
     this._parentElement.innerHTML = '';
+    return this;
   }
 
   /**
    *
    * @param {string} message
    */
-  _showError(message) {
+  showError(message) {
     const errorMarkup = `
     <div class="message-error">
       <p>${message}</p>
@@ -74,7 +78,7 @@ export class View {
    *
    * @param {string} message
    */
-  _showSucces(message) {
+  showSucces(message) {
     const successMarkup = `
     <div class="message-success">
       <p>${message}</p>
