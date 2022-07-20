@@ -18,32 +18,41 @@
     <title>Weather App</title>
   </head>
   <body>
-    <nav class="navbar">
-      <h1>
-        <i class="fa-solid fa-bolt"></i>
+    <nav class="navbar px-6">
+      <div class="navbar__toggle-button">
+        <i class="fa-solid fa-bars-staggered navbar__icon"></i>
+      </div>
+
+      <h1 class="navbar__heading">
+        <i class="fa-solid fa-temperature-arrow-down"></i>
         <span>App Del Clima </span>
-        <i class="fa-solid fa-temperature-high"></i>
+        <i class="fa-solid fa-temperature-arrow-up"></i>
       </h1>
+
+      <div class="navbar__countries">
+        <menu>Themes for selection</menu>
+        <i class="fa-solid fa-font-awesome navbar__icon"></i>
+      </div>
     </nav>
 
-    <main class="section">
-      <div id="map" class="card"></div>
+    <main class="section px-6 py-5">
+      <div id="map"></div>
 
       <div class="form-container">
-        <form action="" class="form">
+        <form class="form">
           <label class="form__label" for="country">
             <input
               class="form__input"
               name=""
               id="country"
               type="text"
-              placeholder="País"
+              placeholder="País o ciudad"
             />
             <i class="fa-solid fa-magnifying-glass form__icon"></i>
           </label>
 
           <label class="form__label" for="region">
-            <select class="form__input select" name="region" id="region">
+            <select class="form__input" name="region" id="region">
               <option class="option" value="1">America</option>
               <option class="option" value="1">Europa</option>
               <option class="option" value="1">Asia</option>
@@ -53,11 +62,16 @@
           </label>
         </form>
 
-        <div class="weather-data">
-          <!-- Weather data from API comes here -->
+        <div class="weather-data-card">
+          <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, saepe
+          corporis! Rerum corrupti quo nemo assumenda nesciunt? Suscipit,
+          temporibus non, nihil nostrum nulla sed rem, exercitationem eum
+          temporibus non, nihil nostrum nulla sed rem, exercitationem eum
+          temporibus non, nihil nostrum nulla sed rem, exercitationem eum -->
+          <!-- city info comes here -->
         </div>
       </div>
     </main>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/app.js"></script>
   </body>
 </html>

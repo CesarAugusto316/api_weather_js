@@ -1,12 +1,11 @@
-// @ts-nocheck
 import axios from 'axios';
+import { openWeatherMaps } from '../apiConfigs';
+import { View } from './View';
 
 
-export class Weather {
-  _apiUrl = import.meta.env.VITE_API_URL;
-  _appId = import.meta.env.VITE_API_APPID;
+const { apiUrl, appId } = openWeatherMaps;
 
-
+export class WeatherCity extends View {
   /**
    *
    * @param {number} lat
@@ -14,13 +13,12 @@ export class Weather {
    */
   async fetchByCoords(lat, lon) {
     try {
-      const { data } = await axios.get(this._apiUrl, {
+      const { data } = await axios.get(apiUrl, {
         params: {
           lang: 'es',
           lat,
           lon,
-          // q,
-          appid: this._appId,
+          appid: appId,
         },
       });
       return data;
@@ -35,10 +33,10 @@ export class Weather {
    */
   async fetchByCityName(q) {
     try {
-      const { data } = await axios.get(this._apiUrl, {
+      const { data } = await axios.get(apiUrl, {
         params: {
           q,
-          appid: this._appId,
+          appid: appId,
         },
       });
       return data;
