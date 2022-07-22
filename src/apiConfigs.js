@@ -11,8 +11,8 @@ export const leaftletMaps = {
       <a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">
         &copy; <b>Jawg</b>Maps</a> &copy; 
       <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>`,
-    minZoom: 4,
-    maxZoom: 14,
+    minZoom: 3,
+    maxZoom: 19,
     subdomains: 'abcd',
   },
 };

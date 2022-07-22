@@ -30,7 +30,15 @@
       </h1>
 
       <div class="navbar__countries">
-        <menu>Themes for selection</menu>
+        <label class="" for="themes">
+          <select class="" name="region" id="themes">
+            <option class="option" value="south america">light</option>
+            <option class="option" value="north america">sunny</option>
+            <option class="option" value="europe">cheerfull</option>
+            <option class="option" value="Asia">dark</option>
+          </select>
+          <i class="fa-solid fa-angle-down form__icon"></i>
+        </label>
         <i class="fa-solid fa-font-awesome navbar__icon"></i>
       </div>
     </nav>
@@ -57,10 +65,13 @@
 
           <label class="form__label" for="region">
             <select class="form__input" name="region" id="region">
-              <option class="option" value="1">America</option>
-              <option class="option" value="1">Europa</option>
-              <option class="option" value="1">Asia</option>
-              <option class="option" value="1">Africa</option>
+              <option class="option" value="south america">Sur America</option>
+              <option class="option" value="north america">
+                Norte America
+              </option>
+              <option class="option" value="europe">Europa</option>
+              <option class="option" value="Asia">Asia</option>
+              <option class="option" value="africa">Africa</option>
             </select>
             <i class="fa-solid fa-angle-down form__icon"></i>
           </label>
@@ -70,12 +81,7 @@
           <div class="spinner-container">
             <i class="fa-solid fa-circle-notch icon--spiner font-4"></i>
           </div>
-          <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, saepe
-          corporis! Rerum corrupti quo nemo assumenda nesciunt? Suscipit,
-          temporibus non, nihil nostrum nulla sed rem, exercitationem eum
-          temporibus non, nihil nostrum nulla sed rem, exercitationem eum
-          temporibus non, nihil nostrum nulla sed rem, exercitationem eum -->
-          <!-- city info comes here -->
+          <!-- weatherCityData comes here -->
         </div>
       </div>
     </main>

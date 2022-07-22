@@ -1,6 +1,4 @@
-import './WeatherModel';
-import { Controller } from './Controller';
+import { WeatherController } from './WeatherController';
 
-
-const app = new Controller();
+const app = new WeatherController();
 app.init();

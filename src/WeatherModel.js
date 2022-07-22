@@ -1,28 +1,53 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable consistent-return */
 import axios from 'axios';
 import { openWeatherMaps } from './apiConfigs';
 
 
 const { apiUrl, appId } = openWeatherMaps;
 
-class WeatherModel {
-  state = {
-    cities: [],
-    currCountry: '',
-    currCity: {
-      description: '',
-      lang: 'es',
-      coords: {
-        lat: '',
-        lon: '',
-      },
-      seaLevel: '',
-      temp: '',
-      pressure: '',
-      humidity: '',
-    },
-  };
+/**
+ * @typedef {object} WeatherData
+ *    @property {number} humidity
+ *    @property {number} pressure
+ *    @property {number} seaLevel
+ *    @property {number} temp
+ *    @property {number} lat
+ *    @property {number} lng
+ *    @property {string} icon
+ *    @property {string} name
+ *    @property {string} country
+ *    @property {string} description
+ */
 
-  _getClientLocation() {
+/**
+ *
+ * @description Global State Object for the App.
+ */
+export const state = {
+  /** @type Array<WeatherData> */
+  cities: [],
+  /** @type WeatherData */
+  currentCity: {
+    humidity: 0,
+    pressure: 0,
+    seaLevel: 0,
+    temp: 0,
+    lat: 0,
+    lng: 0,
+    icon: '',
+    name: '',
+    country: '',
+    description: '',
+  },
+};
+
+class WeatherModel {
+  /**
+   *
+   * @return {Promise<{latitude:number, longitude: number}>}
+   */
+  getClientLocation() {
     return new Promise((resolve, reject) => {
       window.navigator.geolocation.getCurrentPosition((pos) => {
         const { latitude, longitude } = pos.coords;
@@ -36,47 +61,111 @@ class WeatherModel {
   /**
    *
    * @param {number} lat
-   * @param {number} lon
+   * @param {number} lng
+   * @return {Promise<WeatherData>}
    */
-  async fetchByCoords(lat, lon) {
+  async fetchByCoords(lat, lng) {
     try {
       const { data } = await axios.get(apiUrl, {
         params: {
           lang: 'es',
           lat,
-          lon,
+          lon: lng,
           appid: appId,
         },
       });
-      return data;
+      const {
+        main: {
+          humidity, pressure, sea_level: seaLevel, temp,
+        }, name, sys: { country }, weather,
+      } = data;
+
+      /** @type WeatherData */
+      const weatherData = {
+        temp,
+        country,
+        humidity,
+        lat,
+        lng,
+        name,
+        pressure,
+        seaLevel,
+        description: weather[0].description,
+        icon: weather[0].icon,
+      };
+
+      return weatherData;
     } catch (error) {
-      return console.log(error.message);
+      console.log(error.message);
+      return error;
     }
   }
 
   /**
    *
    * @param {string} q
+   * @return {Promise<WeatherData>}
    */
   async fetchByCityName(q) {
     try {
       const { data } = await axios.get(apiUrl, {
         params: {
+          lang: 'es',
           q,
           appid: appId,
         },
       });
-      return data;
+      const {
+        main: {
+          humidity, pressure, sea_level: seaLevel, temp,
+        }, name, sys: { country }, weather, coord: { lon, lat },
+      } = data;
+
+      /** @type WeatherData */
+      const weatherData = {
+        temp,
+        country,
+        humidity,
+        lat,
+        lng: lon,
+        name,
+        pressure,
+        seaLevel,
+        description: weather[0].description,
+        icon: weather[0].icon,
+      };
+
+      return weatherData;
     } catch (error) {
-      return console.log(error.message);
+      console.log(error.message);
+      return error;
     }
   }
 
+  /**
+   *
+   * @param {Array<WeatherData>} weatherCities
+   */
+  updateLocalStorage(weatherCities) {
+    const cities = JSON.stringify(weatherCities);
+    localStorage.setItem('cities', cities);
+  }
 
-  setLocalStorage() {}
+  /**
+   *
+   * @return {Array<WeatherData>}
+   */
+  readLocalStorage() {
+    /** @type Array<WeatherData> */
+    const cities = JSON.parse(localStorage.getItem('cities'));
+    return cities;
+  }
 
-  getLocalStorage() {}
+  deleteLocalStorage() {
+    localStorage.removeItem('cities');
+    location.reload();
+  }
 }
 
 
-export const model = new WeatherModel();
+export const weatherModel = new WeatherModel();

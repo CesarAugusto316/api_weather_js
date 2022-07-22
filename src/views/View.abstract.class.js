@@ -1,10 +1,11 @@
 /**
+ * @description Abstract Class
  *
  * All Views in the App that have state or are rendered onto the screen
- * will inherit from this class, such as WeatherCity or MyMap.
+ * will inherit from this class, such as WeatherCityView or FormView.
  */
 export class View {
-  _markup = '';
+  markup = '';
 
   /**
    *
@@ -16,19 +17,36 @@ export class View {
   }
 
   /**
+   * @param {EventListener} handler
+   */
+  addClickHandler(handler) {
+    this._parentElement.addEventListener('click', handler);
+  }
+
+  /**
+   * @param {EventListener} handler
+   */
+  addLoadHandler(handler) {
+    this._parentElement.addEventListener('load', handler);
+  }
+
+  /**
    * @description Abstract Instance Method
    * every subclass should implement its own way to
-   * generate markup, and store the result in this._markup
+   * generate markup, and store the result in this.markup
+   *
+   * @param {import('../WeatherModel').WeatherData} weatherData
+   * @return this
    */
-  generateMarkup() {}
+  generateMarkup(weatherData) {}
 
   /**
    *
-   * @description once _generateMarkup executes, it must store
-   * the result in this._markup before calling this method.
+   * @description once .generateMarkup() executes, it must store
+   * the result in this.markup before calling this method.
    */
-  renderMarkup() {
-    this._parentElement.innerHTML = this._markup;
+  render() {
+    this._parentElement.innerHTML = this.markup;
     return this;
   }
 
@@ -38,7 +56,7 @@ export class View {
    */
   updateView(htmlMarkup) {
     this.markup = htmlMarkup;
-    this._parentElement.innerHTML = this._markup;
+    this._parentElement.innerHTML = this.markup;
     return this;
   }
 
@@ -56,7 +74,7 @@ export class View {
     return this;
   }
 
-  clearSpinner() {
+  clearView() {
     this._parentElement.innerHTML = '';
     return this;
   }
@@ -67,11 +85,12 @@ export class View {
    */
   showError(message) {
     const errorMarkup = `
-    <div class="message-error">
+    <div class="message message--error">
       <p>${message}</p>
     </div>
     `;
     this._parentElement.innerHTML = errorMarkup;
+    return this;
   }
 
   /**
@@ -80,17 +99,18 @@ export class View {
    */
   showSucces(message) {
     const successMarkup = `
-    <div class="message-success">
+    <div class="message message--success">
       <p>${message}</p>
     </div>
     `;
     this._parentElement.innerHTML = successMarkup;
+    return this;
   }
 
   /**
    *
    * @param {string} selector
-   * @returns Element
+   * @return {HTMLElement}
    */
   _$(selector) {
     return document.querySelector(selector);

@@ -6,6 +6,8 @@
   --font-family: "Poppins", Inter, Avenir, Helvetica, Arial, sans-serif;
   --primary: rgb(55, 124, 251);
   --primary-focus: rgb(5, 87, 240);
+  --success: rgb(102, 204, 138);
+  --accent: rgb(234, 82, 52);
   --base-100: rgb(253, 253, 253);
   --base-150: rgb(247, 247, 247);
   --base-200: rgb(230, 230, 230);
@@ -218,11 +220,48 @@ a {
 .weather-data-card {
   padding: 2.6rem 3rem;
   overflow-y: scroll;
-  height: 22.4rem;
+  height: 25.8rem;
   width: 100%;
   border-radius: 1rem;
   box-shadow: 0px 0px 16px 4px var(--base-drop-shadow);
   background-color: rgba(255, 255, 255, 0.4);
+  color: var(--base-content);
+}
+
+.weather-card__title {
+  color: var(--primary-focus);
+  text-transform: uppercase;
+  font-size: 1.8rem;
+}
+
+.weather-data-card > * {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weather-card__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weather-card__icons {
+  display: flex;
+  gap: 2rem;
+  padding: 0.6rem;
+}
+
+.weather-card__icons > * {
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.weather-card__icons .fa-bookmark:hover {
+  color: var(--primary);
+  transform: scale(1.15);
+}
+.weather-card__icons .fa-trash-can:hover {
+  color: var(--accent);
+  transform: scale(1.15);
 }
 
 body::-webkit-scrollbar,
@@ -239,26 +278,34 @@ body::-webkit-scrollbar,
   background-color: var(--primary-drop-shadow);
 }
 
-.weather-data-card > * {
-  display: flex;
-  justify-content: space-between;
-}
-
-.weather-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.weather-title {
-  text-transform: uppercase;
-  font-size: 2rem;
-}
-
 .option {
   font-family: var(--font-family);
   font-size: 1.4rem;
   color: var(--base-content);
   background-color: var(--base-200);
+}
+
+/*─────────────────────────────────────
+ * UI Messages
+ *────────────────────────────────────*/
+.font-succes {
+  color: var(--success);
+}
+
+.message {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+.message--error {
+  color: var(--accent);
+}
+.message--success {
+  color: var(--success);
 }
 
 /*─────────────────────────────────────
