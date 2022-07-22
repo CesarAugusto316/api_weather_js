@@ -139,7 +139,7 @@ a {
 }
 
 .navbar__heading {
-  margin-left: 6rem;
+  margin-left: 8.8rem;
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -149,6 +149,36 @@ a {
   cursor: pointer;
   font-size: 2.4rem;
   font-weight: 600;
+}
+
+.navbar__themes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.navbar__themes {
+  position: relative;
+}
+
+.select__themes {
+  min-width: 10.4rem;
+  appearance: none;
+  padding: 1rem 1.4rem;
+  border-radius: 1rem;
+  background-color: var(--base-100);
+  box-shadow: 0px 0px 6px 1px var(--base-drop-shadow);
+  border: 1px solid var(--base-150);
+  font-size: 1.5rem;
+  color: var(--base-content);
+}
+
+.select__themes-icon {
+  z-index: 10;
+  position: absolute;
+  right: 4.8rem;
+  top: 1.2rem;
 }
 
 .section {
@@ -214,7 +244,7 @@ a {
   border-radius: 1.8rem;
   border: 2.4px solid var(--base-150);
   z-index: 0;
-  box-shadow: 0px 0px 16px 4px var(--base-drop-shadow);
+  box-shadow: 1px 1px 14px 4px var(--base-drop-shadow);
 }
 
 .weather-data-card {

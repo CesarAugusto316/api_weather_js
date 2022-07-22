@@ -6,6 +6,7 @@ import { weatherModel, state } from './WeatherModel';
 import { MyMapView } from './views/MyMapView';
 import { WeatherCityView } from './views/WeatherCityView';
 import { FormView } from './views/FormView';
+import { ThemeSelector } from './views/NavbarThemeSelector';
 
 
 const { tileLayers, options } = leaftletMaps; // configurations
@@ -16,11 +17,12 @@ export class WeatherController {
   /** @type Marker */
   currentMarker;
   currentWeatherCityData = state.currentCity;
-  _offSetX = 2;
   _initialZoom = 7;
+  _theme = 1;
   // Views
   _weatherCardView = new WeatherCityView('.weather-data-card');
   _formView = new FormView('.form');
+  _themeSelectorView = new ThemeSelector('.select__themes');
   _mapView = map('map'); // leafletMap
 
 
@@ -29,6 +31,19 @@ export class WeatherController {
     this._mapView.on('click', this._onClickMapHandler.bind(this));
     this._formView.addSubmitHandler(this._onSearchByNameFormInputHandler.bind(this));
     this._formView.addChangeHandler(this._onSearchByRegionFormInputHandler.bind(this));
+    this._themeSelectorView.addChangeHandler(this._onSelectThemeHandler.bind(this));
+  }
+
+
+  /**
+   *
+   * @param {HashChangeEvent} e
+   */
+  _onSelectThemeHandler(e) {
+    // @ts-ignore
+    this._theme = +e.target.value;
+    // weatherModel.deleteLocalStorage();
+    this.init();
   }
 
   /**
@@ -149,9 +164,9 @@ export class WeatherController {
   init() {
     weatherModel.getClientLocation()
       .then(({ latitude, longitude }) => {
-        this._mapView.setView([latitude, longitude + this._offSetX], this._initialZoom);
+        this._mapView.setView([latitude, longitude], this._initialZoom);
 
-        tileLayer(tileLayers[2], options).addTo(this._mapView); // loads the map's Layer
+        tileLayer(tileLayers[this._theme], options).addTo(this._mapView); // loads the map's Layer
         return { latitude, longitude };
       })
       .then(({ latitude, longitude }) => {

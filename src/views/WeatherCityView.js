@@ -33,7 +33,7 @@ export class WeatherCityView extends View {
         <h4 class="weather-card__title">${description}</h4>
       </div>
 
-      <p><b>Ciudad</b>${name || 'desconocida'}, ${country || 'desconocido'}</p>
+      <p><b>Ciudad</b>${name || 'desconocida'}, ${country || ''}</p>
       <p><b>Nivel del mar</b> ${seaLevel || 0} m</p>
       <p><b>Temperatura</b> ${temp} °F </p>
       <p><b>Humedad</b> ${humidity || 0} % </p>
