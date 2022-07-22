@@ -1,12 +1,11 @@
 import {
-  map, tileLayer, Marker,
+  map, tileLayer, Marker, control,
 } from 'leaflet';
 import { leaftletMaps } from './apiConfigs';
 import { weatherModel, state } from './WeatherModel';
-import { MyMapView } from './views/MyMapView';
-import { WeatherCityView } from './views/WeatherCityView';
-import { FormView } from './views/FormView';
-import { ThemeSelector } from './views/NavbarThemeSelector';
+import {
+  FormView, MyMapView, ThemeSelector, WeatherCityView,
+} from './views';
 
 
 const { tileLayers, options } = leaftletMaps; // configurations
@@ -17,13 +16,32 @@ export class WeatherController {
   /** @type Marker */
   currentMarker;
   currentWeatherCityData = state.currentCity;
-  _initialZoom = 7;
-  _theme = 1;
+  _layersThemes = {
+    1: tileLayer(tileLayers[1], options),
+    2: tileLayer(tileLayers[2], options),
+    3: tileLayer(tileLayers[3], options),
+    4: tileLayer(tileLayers[4]),
+  };
+  // for tileLayer selector-control
+  _baseMaps = {
+    Light: this._layersThemes[1],
+    Sunny: this._layersThemes[2],
+    Cheerfull: this._layersThemes[3],
+    Dark: this._layersThemes[4],
+  };
   // Views
   _weatherCardView = new WeatherCityView('.weather-data-card');
   _formView = new FormView('.form');
   _themeSelectorView = new ThemeSelector('.select__themes');
-  _mapView = map('map'); // leafletMap
+  _mapView = map('map', {
+    zoom: 7,
+    layers: [
+      this._layersThemes[1],
+    ],
+    minZoom: 3,
+    maxZoom: 19,
+    zoomControl: false,
+  }).addControl(control.zoom({ position: 'bottomleft' }));
 
 
   constructor() {
@@ -34,16 +52,18 @@ export class WeatherController {
     this._themeSelectorView.addChangeHandler(this._onSelectThemeHandler.bind(this));
   }
 
-
   /**
    *
    * @param {HashChangeEvent} e
    */
   _onSelectThemeHandler(e) {
     // @ts-ignore
-    this._theme = +e.target.value;
-    // weatherModel.deleteLocalStorage();
-    this.init();
+    const theme = e.target.value;
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
   }
 
   /**
@@ -164,9 +184,9 @@ export class WeatherController {
   init() {
     weatherModel.getClientLocation()
       .then(({ latitude, longitude }) => {
-        this._mapView.setView([latitude, longitude], this._initialZoom);
-
-        tileLayer(tileLayers[this._theme], options).addTo(this._mapView); // loads the map's Layer
+        this._mapView.setView([latitude, longitude]);
+        control.layers(this._baseMaps).addTo(this._mapView).setPosition('bottomright');
+        // tileLayer(tileLayers[this._theme], options).addTo(this._mapView);
         return { latitude, longitude };
       })
       .then(({ latitude, longitude }) => {
@@ -212,5 +232,3 @@ export class WeatherController {
       });
   }
 }
-
-
