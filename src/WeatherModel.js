@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable consistent-return */
 import axios from 'axios';
 import { openWeatherMaps } from './apiConfigs';
 
@@ -79,7 +77,6 @@ class WeatherModel {
           humidity, pressure, sea_level: seaLevel, temp,
         }, name, sys: { country }, weather,
       } = data;
-
       /** @type WeatherData */
       const weatherData = {
         temp,
@@ -93,7 +90,6 @@ class WeatherModel {
         description: weather[0].description,
         icon: weather[0].icon,
       };
-
       return weatherData;
     } catch (error) {
       console.log(error.message);
@@ -120,7 +116,6 @@ class WeatherModel {
           humidity, pressure, sea_level: seaLevel, temp,
         }, name, sys: { country }, weather, coord: { lon, lat },
       } = data;
-
       /** @type WeatherData */
       const weatherData = {
         temp,
@@ -134,7 +129,6 @@ class WeatherModel {
         description: weather[0].description,
         icon: weather[0].icon,
       };
-
       return weatherData;
     } catch (error) {
       console.log(error.message);
@@ -166,6 +160,5 @@ class WeatherModel {
     location.reload();
   }
 }
-
 
 export const weatherModel = new WeatherModel();

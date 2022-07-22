@@ -95,7 +95,6 @@ export class WeatherController {
    */
   _onSearchByRegionFormInputHandler(e) {
     if (e.target === this._formView.inputSelect) {
-      console.log(this._formView.inputSelect.value);
       const { value } = this._formView.inputSelect;
       this._weatherCardView
         .clearView()
@@ -170,7 +169,6 @@ export class WeatherController {
     this.markers.forEach((m) => this._mapView.removeLayer(m));
     this.markers = [this.currentMarker];
     this._mapView.addLayer(this.currentMarker).setView([lat, lng]);
-    console.log('render all markers:', this.markers);
   }
 
   _renderAllMarkers({ lat, lng }) {}
@@ -186,7 +184,6 @@ export class WeatherController {
       .then(({ latitude, longitude }) => {
         this._mapView.setView([latitude, longitude]);
         control.layers(this._baseMaps).addTo(this._mapView).setPosition('bottomright');
-        // tileLayer(tileLayers[this._theme], options).addTo(this._mapView);
         return { latitude, longitude };
       })
       .then(({ latitude, longitude }) => {
@@ -194,7 +191,6 @@ export class WeatherController {
 
         if (cities?.length > 0) {
           console.log('hello from localStorage:', cities);
-
           cities.forEach((weatherData) => {
             this._renderOneMarker(weatherData);
           });
@@ -208,7 +204,6 @@ export class WeatherController {
           weatherModel.fetchByCoords(latitude, longitude)
             .then((weatherData) => {
               console.log('hello from weatherApi:', weatherData);
-
               this._renderOneMarker(weatherData);
               this._weatherCardView
                 .clearView()
