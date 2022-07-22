@@ -10,7 +10,7 @@ export class View {
   /**
    *
    * @param {string} selector '.class' or '#id'
-   * @returns Element
+   * @return Element
    */
   constructor(selector) {
     this._parentElement = this._$(selector);

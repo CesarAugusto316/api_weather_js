@@ -166,7 +166,7 @@ a {
 
 .navbar__heading {
   letter-spacing: -0.6px;
-  margin-left: 6.2rem;
+  margin-left: 5.2rem;
   display: flex;
   gap: 0.8rem;
   align-items: center;
@@ -292,6 +292,10 @@ a {
   color: rgb(63, 66, 98);
 }
 
+.weather-data-card b {
+  font-weight: 600;
+}
+
 .weather-card__title {
   color: var(--primary-focus);
   text-transform: uppercase;
@@ -312,6 +316,11 @@ a {
   display: flex;
   gap: 2rem;
   padding: 0.6rem;
+}
+.weather-card__icons div {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .weather-card__icons > * {

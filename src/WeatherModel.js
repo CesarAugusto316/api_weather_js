@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Marker } from 'leaflet';
 import { openWeatherMaps } from './apiConfigs';
 
 
@@ -20,7 +21,7 @@ const { apiUrl, appId } = openWeatherMaps;
 
 /**
  *
- * @description Global State Object for the App.
+ * @description Global State Object for the entire App.
  */
 export const state = {
   /** @type Array<WeatherData> */
@@ -38,6 +39,12 @@ export const state = {
     country: '',
     description: '',
   },
+  /** @type Array<Marker> */
+  markers: [],
+  /** @type Marker */
+  currentMarker: new Marker([0, 0]), // {lat, lng}
+  /** @type Array<WeatherData> */
+  citiesFromLocalStorage: [],
 };
 
 class WeatherModel {
@@ -90,6 +97,7 @@ class WeatherModel {
         description: weather[0].description,
         icon: weather[0].icon,
       };
+      state.currentCity = weatherData; // handles state
       return weatherData;
     } catch (error) {
       console.log(error.message);
@@ -129,6 +137,8 @@ class WeatherModel {
         description: weather[0].description,
         icon: weather[0].icon,
       };
+
+      state.currentCity = weatherData; // handles state
       return weatherData;
     } catch (error) {
       console.log(error.message);
@@ -136,25 +146,25 @@ class WeatherModel {
     }
   }
 
-  /**
-   *
-   * @param {Array<WeatherData>} weatherCities
-   */
-  updateLocalStorage(weatherCities) {
-    const cities = JSON.stringify(weatherCities);
+  writeToLocalStorage() {
+    const cities = JSON.stringify(state.cities); // handles state
     localStorage.setItem('cities', cities);
   }
 
-  /**
-   *
-   * @return {Array<WeatherData>}
-   */
-  readLocalStorage() {
+  readFromLocalStorage() {
     /** @type Array<WeatherData> */
-    const cities = JSON.parse(localStorage.getItem('cities'));
+    const cities = JSON.parse(localStorage.getItem('cities')) || [];
+    if (cities.length) {
+      state.citiesFromLocalStorage = cities; // handles state
+      state.currentCity = cities[cities.length - 1];
+    }
     return cities;
   }
 
+  /**
+   *
+   * @return void
+   */
   deleteLocalStorage() {
     localStorage.removeItem('cities');
     location.reload();

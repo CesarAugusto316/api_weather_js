@@ -9,6 +9,7 @@ export class WeatherCityView extends View {
   /**
    *
    * @param {import('../WeatherModel').WeatherData} weatherData
+   * @return this
    */
   generateMarkup(weatherData) {
     const {
@@ -17,10 +18,10 @@ export class WeatherCityView extends View {
 
     this.markup = `
       <div>
-       <span class="weather-card__icons font-2">
-        <i class="fa-solid fa-bookmark"></i>
-        <i class="fa-solid fa-trash-can"></i>
-       </span> 
+        <span class="weather-card__icons font-2">
+          <i class="fa-solid fa-bookmark"></i>
+          <div>Guardar</div>
+        </span>
       </div> 
       <div class="weather-card__header">
         <figure>
@@ -33,7 +34,7 @@ export class WeatherCityView extends View {
         <h4 class="weather-card__title">${description}</h4>
       </div>
 
-      <p><b>Ciudad</b>${name || 'desconocida'}, ${country || ''}</p>
+      <p><b>Ciudad/Pais</b>${name || 'desconocida'}, ${country || ''}</p>
       <p><b>Nivel del mar</b> ${seaLevel || 0} m</p>
       <p><b>Temperatura</b> ${temp} °F </p>
       <p><b>Humedad</b> ${humidity || 0} % </p>
