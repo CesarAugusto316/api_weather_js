@@ -20,7 +20,16 @@
   <body>
     <nav class="navbar px-7">
       <div class="navbar__toggle-button">
-        <i class="fa-solid fa-bars-staggered navbar__icon"></i>
+        <span class="nabvar__toggle-botton-CTA" title="Mis colecciones">
+          <i class="fa-solid fa-bars-staggered navbar__icon"></i>
+          <span class="navbar__toggle-button-title">Cities</span>
+        </span>
+
+        <div class="navbar__menu hidden">
+          <div class="spinner-container">
+            <i class="fa-solid fa-circle-notch icon--spiner font-2"></i>
+          </div>
+        </div>
       </div>
 
       <h1 class="navbar__heading">
@@ -35,7 +44,7 @@
             class="select__themes"
             name="region"
             id="themes"
-            title="select a theme layer"
+            title="selecciona dark o light mode"
           >
             <option class="option" value="light">Light</option>
             <option class="option" value="dark">Dark</option>
@@ -47,14 +56,14 @@
     </nav>
 
     <main class="section px-6 py-5">
-      <div id="map">
+      <div id="map" title="dá un click sobre el mapa para saber la temperatura">
         <div class="spinner-container">
           <i class="fa-solid fa-circle-notch icon--spiner font-7"></i>
         </div>
       </div>
 
       <div class="form-container">
-        <form class="form">
+        <form class="form" title="desplazate hacia cualquier lugar del mundo">
           <label class="form__label" for="country">
             <input
               class="form__input"

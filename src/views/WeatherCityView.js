@@ -18,11 +18,11 @@ export class WeatherCityView extends View {
 
     this.markup = `
       <div>
-        <span class="weather-card__icons font-2">
+        <span class="weather-card__icons font-2" title="presiona el ícono para guardar">
           <i class="fa-solid fa-bookmark"></i>
           <div>Guardar</div>
         </span>
-      </div> 
+      </div>
       <div class="weather-card__header">
         <figure>
           <img
@@ -34,7 +34,7 @@ export class WeatherCityView extends View {
         <h4 class="weather-card__title">${description}</h4>
       </div>
 
-      <p><b>Ciudad/Pais</b>${name || 'desconocida'}, ${country || ''}</p>
+      <p class="text-ellipsis"><b>Ciudad/Pais</b>${name || 'desconocida'}, ${country || ''}</p>
       <p><b>Nivel del mar</b> ${seaLevel || 0} m</p>
       <p><b>Temperatura</b> ${temp} °F </p>
       <p><b>Humedad</b> ${humidity || 0} % </p>

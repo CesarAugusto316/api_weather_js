@@ -35,7 +35,8 @@ export class View {
    * every subclass should implement its own way to
    * generate markup, and store the result in this.markup
    *
-   * @param {import('../WeatherModel').WeatherData} weatherData
+   * @param {import('../WeatherModel').WeatherData |
+   * Array<import('../WeatherModel').WeatherData>} weatherData
    * @return this
    */
   generateMarkup(weatherData) {}

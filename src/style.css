@@ -12,8 +12,8 @@
   --base-150: rgb(247, 247, 247);
   --base-200: rgb(230, 230, 230);
   --base-300: rgb(217, 217, 222);
-  --base-content: rgb(63, 66, 98);
-  --base-drop-shadow: rgba(46, 55, 74, 0.1);
+  --base-content: rgb(59, 62, 91);
+  --base-drop-shadow: rgba(46, 55, 74, 0.11);
   --primary-drop-shadow: rgba(3, 69, 190, 0.6);
 }
 
@@ -64,18 +64,21 @@ a {
   --base-100: rgb(253, 253, 253);
   --base-150: rgb(247, 247, 247);
   --base-200: rgb(230, 230, 230);
-  --base-content: rgb(63, 66, 98);
+  --base-content: rgb(59, 62, 91);
 }
 
 /*─────────────────────────────────────
  * Utilities
  *────────────────────────────────────*/
 .hidden {
-  display: none;
+  display: none !important;
+  opacity: 0;
 }
 
-.invisible {
-  visibility: hidden;
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .px-6 {
@@ -155,7 +158,75 @@ a {
   align-items: center;
   justify-content: space-between;
   background-color: var(--base-100);
-  box-shadow: 0px 0px 12px 2px var(--base-drop-shadow);
+  box-shadow: 0px 0px 12px 0px var(--base-drop-shadow);
+}
+
+.navbar__toggle-button {
+  position: relative;
+}
+
+.nabvar__toggle-botton-CTA {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.navbar__toggle-button-title {
+  font-weight: 600;
+}
+
+.navbar__menu {
+  position: absolute;
+  top: 184%;
+  left: -1rem;
+  z-index: 150;
+  background-color: var(--base-100);
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column-reverse;
+  width: 24rem;
+  gap: 0.8rem;
+  max-height: 30rem;
+  overflow-y: scroll;
+  opacity: 0.9;
+  box-shadow: 0px 0px 10px 1px var(--base-drop-shadow);
+  transition: opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar__menu-item {
+  cursor: pointer;
+  color: var(--base-content);
+  border-radius: 0.8rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar__menu-item:hover {
+  transform: scale(1.11);
+}
+
+.navbar__menu-item .fa-trash-can:hover {
+  color: var(--accent);
+  transform: scale(1.2);
+}
+
+.navbar__menu-item--see-all {
+  font-weight: 600;
+}
+
+.navbar__menu::-webkit-scrollbar-thumb {
+  border-bottom-right-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background-color: var(--primary-drop-shadow);
+}
+
+.navbar__menu::-webkit-scrollbar {
+  border-bottom-right-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background-color: var(--base-200);
 }
 
 .navbar__countries {
@@ -165,7 +236,7 @@ a {
 
 .navbar__heading {
   letter-spacing: -0.6px;
-  margin-left: 5.2rem;
+  margin-left: 3.8rem;
   display: flex;
   gap: 0.8rem;
   align-items: center;
@@ -175,13 +246,18 @@ a {
   cursor: pointer;
   font-size: 2.4rem;
   font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.navbar__icon:hover {
+  transform: scale(1.25);
 }
 
 .navbar__themes {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1rem;
 }
 
 .navbar__themes {
@@ -252,13 +328,13 @@ a {
   display: block;
   border-radius: 1.2rem;
   appearance: none;
-  box-shadow: 0px 0px 12px 4px var(--base-drop-shadow);
+  box-shadow: 2px 2px 12px 4px var(--base-drop-shadow);
 }
 
 .form__input:focus {
   opacity: 0.9;
   outline: 2px solid var(--primary);
-  box-shadow: 0px 0px 7.2px 2px var(--primary-drop-shadow);
+  box-shadow: 1px 1px 7.2px 2px var(--primary-drop-shadow);
 }
 
 .form__label {
@@ -286,9 +362,9 @@ a {
   height: 25.8rem;
   width: 100%;
   border-radius: 1rem;
-  box-shadow: 0px 0px 16px 4px var(--base-drop-shadow);
+  box-shadow: 2px 2px 16px 4px var(--base-drop-shadow);
   background-color: rgba(255, 255, 255, 0.4);
-  color: rgb(63, 66, 98);
+  color: rgb(59, 62, 91);
 }
 
 .weather-data-card b {
@@ -313,7 +389,7 @@ a {
 
 .weather-card__icons {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   padding: 0.6rem;
 }
 .weather-card__icons div {
@@ -329,10 +405,6 @@ a {
 
 .weather-card__icons .fa-bookmark:hover {
   color: var(--primary);
-  transform: scale(1.15);
-}
-.weather-card__icons .fa-trash-can:hover {
-  color: var(--accent);
   transform: scale(1.15);
 }
 
@@ -441,7 +513,7 @@ body::-webkit-scrollbar,
   }
 
   .navbar__heading {
-    margin-left: 5rem;
+    margin-left: 4rem;
   }
 
   .form-container {
@@ -489,7 +561,7 @@ body::-webkit-scrollbar,
   }
 
   .navbar__heading {
-    margin-left: 3rem;
+    margin-left: 2rem;
   }
 
   .form {

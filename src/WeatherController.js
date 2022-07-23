@@ -4,7 +4,7 @@ import {
 import { leaftletMaps } from './apiConfigs';
 import { weatherModel, state } from './WeatherModel';
 import {
-  FormView, MyMapView, ThemeSelectorView, WeatherCityView,
+  FormView, MyMapView, ThemeSelectorView, WeatherCityView, NavbarTogglerView,
 } from './views';
 
 
@@ -28,6 +28,7 @@ export class WeatherController {
   _weatherCardView = new WeatherCityView('.weather-data-card');
   _formView = new FormView('.form');
   _themeSelectorView = new ThemeSelectorView('.select__themes');
+  _navbarTogglerView = new NavbarTogglerView('.navbar__toggle-button');
   _mapView = map('map', {
     zoom: 7,
     layers: [
@@ -40,13 +41,66 @@ export class WeatherController {
 
 
   constructor() {
-    // registering eventHandlers
+    // registering eventHandlers for the entire app.
     this._mapView.on('click', this._onClickMapHandler.bind(this));
     this._formView.addSubmitHandler(this._onSearchByNameFormInputHandler.bind(this));
     this._formView.addChangeHandler(this._onSearchByRegionFormInputHandler.bind(this));
     this._weatherCardView.addClickHandler(this._onBookMarkedHandler.bind(this));
-    this._weatherCardView.addClickHandler(this._onTrashedHandler.bind(this));
     this._themeSelectorView.addChangeHandler(this._onSelectThemeHandler.bind(this));
+    this._navbarTogglerView.addClickHandler(this._onToggleNavbarButton.bind(this));
+    // this._navbarTogglerView.addClickHandler(this._onTrashedHandler.bind(this));
+  }
+
+  /**
+   *
+   * @param {MouseEvent} e
+   */
+  _onToggleNavbarButton(e) {
+    // @ts-ignore
+    if (e.target.closest('.nabvar__toggle-botton-CTA')) {
+      this._navbarTogglerView.navbarMenu
+        ._parentElement
+        .classList.toggle('hidden');
+    }
+  }
+
+  /**
+   *
+   * @param {MouseEvent} e
+   */
+  _onTrashedHandler(e) {
+    // @ts-ignore
+    if (e.target.closest('.fa-trash-can')) {
+      console.log('I am a trash can');
+      // console.log(this._weatherCardView);
+    }
+  }
+
+  /**
+   *
+   * @description sideEffect function, before writing to localStorage,
+   * we first need to read if there is any value in localStorage, so we
+   * can not loose our localData.
+   *
+   * @param {MouseEvent} e
+   */
+  _onBookMarkedHandler(e) {
+    // @ts-ignore
+    if (e.target.closest('.fa-bookmark')) {
+      const duplicates = weatherModel.checkDuplicateCoords();
+
+      if (duplicates) {
+        console.log('there are duplicates', duplicates);
+        console.log('we can not store your data 😓.');
+      } else {
+        let cities = weatherModel.readFromLocalStorage();
+        cities = [...cities, state.currentCity];
+        weatherModel.writeToLocalStorage(cities);
+        const newCities = weatherModel.readFromLocalStorage();
+        console.log('there no are duplicates', duplicates);
+        console.log('we can store your data, 😃, cities added', newCities);
+      }
+    }
   }
 
   /**
@@ -142,44 +196,6 @@ export class WeatherController {
   }
 
   /**
-   *
-   * @description sideEffect function, before writing to localStorage,
-   * we first need to read if there is any value in localStorage, so we
-   * can not loose our localData.
-   *
-   * @param {MouseEvent} e
-   */
-  _onBookMarkedHandler(e) {
-    // @ts-ignore
-    if (e.target.closest('.fa-bookmark')) {
-      const duplicates = weatherModel.checkDuplicateCoords();
-
-      if (duplicates) {
-        console.log('there are duplicates', duplicates);
-        console.log('we can not store your data 😓.');
-      } else {
-        let cities = weatherModel.readFromLocalStorage();
-        cities = [...cities, state.currentCity];
-        weatherModel.writeToLocalStorage(cities);
-        const newCities = weatherModel.readFromLocalStorage();
-        console.log('there no are duplicates', duplicates);
-        console.log('we can store your data, 😃, cities added', newCities);
-      }
-    }
-  }
-
-  /**
-   *
-   * @param {MouseEvent} e
-   */
-  _onTrashedHandler(e) {
-    // @ts-ignore
-    if (e.target.closest('.fa-trash-can')) {
-      // console.log(this._weatherCardView);
-    }
-  }
-
-  /**
    * @description sideEffect function
    *
    * @param {import('./WeatherModel').WeatherData} weatherData
@@ -260,6 +276,12 @@ export class WeatherController {
           this._weatherCardView
             .clearView()
             .generateMarkup(latestCity)
+            .render();
+
+          this._navbarTogglerView
+            .navbarMenu
+            .clearView()
+            .generateMarkup(state.citiesFromLocalStorage)
             .render();
 
           state.currentCity = latestCity;
