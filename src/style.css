@@ -8,7 +8,6 @@
   --primary-focus: rgb(5, 87, 240);
   --success: rgb(102, 204, 138);
   --accent: rgb(234, 82, 52);
-
   --base-100: rgb(253, 253, 253);
   --base-150: rgb(247, 247, 247);
   --base-200: rgb(230, 230, 230);
@@ -148,7 +147,7 @@ a {
 }
 
 /*─────────────────────────────────────
- * elements
+ * Elements
  *────────────────────────────────────*/
 .navbar {
   height: 7.2rem;
@@ -382,7 +381,7 @@ body::-webkit-scrollbar,
 }
 
 /*─────────────────────────────────────
- * elements
+ * Animations
  *────────────────────────────────────*/
 @-webkit-keyframes rotate-center {
   0% {
@@ -406,7 +405,7 @@ body::-webkit-scrollbar,
 }
 
 /*─────────────────────────────────────
- * UI Messages
+ * Leaflet styles
  *────────────────────────────────────*/
 .leaflet-control {
   font-size: 1.6rem;
@@ -451,6 +450,7 @@ body::-webkit-scrollbar,
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
   .form__input {
     font-size: 1.38rem;
     padding: 1.2rem;
@@ -463,6 +463,7 @@ body::-webkit-scrollbar,
     font-size: 2rem;
     gap: 0.2rem;
   }
+
   .navbar__themes {
     gap: 0.6rem;
   }

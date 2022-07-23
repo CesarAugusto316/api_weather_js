@@ -1,7 +1,7 @@
 import { View } from './View.abstract.class';
 
 
-export class ThemeSelector extends View {
+export class ThemeSelectorView extends View {
   /**
    * @param {EventListener} handler
    */

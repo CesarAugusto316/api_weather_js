@@ -20,8 +20,9 @@ const { apiUrl, appId } = openWeatherMaps;
  */
 
 /**
- *
- * @description Global State Object for the entire App.
+ * @description Global State Object for the entire App,
+ * State keeps in Sync with LocalStorage by default, through
+ * the WeatherModel instance.
  */
 export const state = {
   /** @type Array<WeatherData> */
@@ -146,18 +147,28 @@ class WeatherModel {
     }
   }
 
-  writeToLocalStorage() {
-    const cities = JSON.stringify(state.cities); // handles state
+  /**
+   * @description When we write to localStorage, we keep localStorage
+   * in Sync with the state object.
+   *
+   * @param {Array<WeatherData>} newState
+   */
+  writeToLocalStorage(newState) {
+    const cities = JSON.stringify(newState); // handles state
     localStorage.setItem('cities', cities);
+    this.readFromLocalStorage(); // will update our state
   }
 
+  /**
+   ** @description When we write to localStorage, we keep localStorage
+   * in Sync with the state object.
+   *
+   * @return {Array<WeatherData>}
+   */
   readFromLocalStorage() {
     /** @type Array<WeatherData> */
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
-    if (cities.length) {
-      state.citiesFromLocalStorage = cities; // handles state
-      state.currentCity = cities[cities.length - 1];
-    }
+    state.citiesFromLocalStorage = cities; // handles state
     return cities;
   }
 
@@ -168,6 +179,37 @@ class WeatherModel {
   deleteLocalStorage() {
     localStorage.removeItem('cities');
     location.reload();
+  }
+
+  /**
+  * @description if there are duplicates then returns true,
+  * otherwise false, so we can programatically choose to
+  * store a city or not.
+  *
+  * @return boolean
+  */
+  checkDuplicateCoords() {
+    let result = false;
+    const objValues = Object.keys(state.currentCity);
+    const cities = this.readFromLocalStorage();
+
+    cities.forEach((item) => {
+      const areEqual = [];
+      Object.keys(item).forEach((key1, index) => {
+        if ((key1 === 'lat' && objValues[index] === 'lat')
+         || (key1 === 'lng' && objValues[index] === 'lng')
+        ) {
+          if (item[key1] === state.currentCity[objValues[index]]) {
+            areEqual.push(true);
+          }
+        }
+      });
+      if (areEqual.length === 2
+        && !areEqual.includes(false)) {
+        result = true;
+      }
+    });
+    return result;
   }
 }
 

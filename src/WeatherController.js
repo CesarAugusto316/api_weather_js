@@ -4,7 +4,7 @@ import {
 import { leaftletMaps } from './apiConfigs';
 import { weatherModel, state } from './WeatherModel';
 import {
-  FormView, MyMapView, ThemeSelector, WeatherCityView,
+  FormView, MyMapView, ThemeSelectorView, WeatherCityView,
 } from './views';
 
 
@@ -27,7 +27,7 @@ export class WeatherController {
   // Views
   _weatherCardView = new WeatherCityView('.weather-data-card');
   _formView = new FormView('.form');
-  _themeSelectorView = new ThemeSelector('.select__themes');
+  _themeSelectorView = new ThemeSelectorView('.select__themes');
   _mapView = map('map', {
     zoom: 7,
     layers: [
@@ -78,6 +78,7 @@ export class WeatherController {
           .clearView()
           .generateMarkup(weatherData)
           .render();
+        // this._logger(); // logs newest state
       })
       .catch((error) => {
         this._weatherCardView
@@ -141,15 +142,29 @@ export class WeatherController {
   }
 
   /**
-   * @description sideEffect function
+   *
+   * @description sideEffect function, before writing to localStorage,
+   * we first need to read if there is any value in localStorage, so we
+   * can not loose our localData.
    *
    * @param {MouseEvent} e
    */
   _onBookMarkedHandler(e) {
     // @ts-ignore
     if (e.target.closest('.fa-bookmark')) {
-      state.cities.push({ ...state.currentCity });
-      weatherModel.writeToLocalStorage();
+      const duplicates = weatherModel.checkDuplicateCoords();
+
+      if (duplicates) {
+        console.log('there are duplicates', duplicates);
+        console.log('we can not store your data 😓.');
+      } else {
+        let cities = weatherModel.readFromLocalStorage();
+        cities = [...cities, state.currentCity];
+        weatherModel.writeToLocalStorage(cities);
+        const newCities = weatherModel.readFromLocalStorage();
+        console.log('there no are duplicates', duplicates);
+        console.log('we can store your data, 😃, cities added', newCities);
+      }
     }
   }
 
@@ -179,13 +194,14 @@ export class WeatherController {
   }
 
   /**
-   * @description sideEffect function
+   * @description sideEffect function, it always keeps only one Marker
+   * in Markers
    *
    * @param {{lat: number, lng: number}} latlng
    */
   _renderOneMarker({ lat, lng }) {
     state.currentMarker = new Marker({ lat, lng }, { draggable: false });
-    state.markers.forEach((m) => this._mapView.removeLayer(m));
+    state.markers.forEach((m) => this._mapView.removeLayer(m)); // removes all previous markers
     state.markers = [state.currentMarker];
     this._mapView.addLayer(state.currentMarker).setView([lat, lng]);
   }
@@ -195,19 +211,22 @@ export class WeatherController {
    *
    * @param {{lat: number, lng: number}} latlng
    */
-  _renderManyMarkers({ lat, lng }) {
+  _renderAllMarkers({ lat, lng }) {
     state.currentMarker = new Marker({ lat, lng }, { draggable: false });
     state.markers.push(state.currentMarker);
     this._mapView.addLayer(state.currentMarker).setView([lat, lng]);
   }
 
+  /**
+   *
+   * @description use during development
+   */
   _logger() {
-    // console.log('weatherData from weatherApi:', weatherData);
-    console.log('state.currentCity:', state.currentCity);
-    console.log('state.cities:', state.cities);
-    console.log('this.currentMarker:', state.currentMarker);
-    console.log('this.markers:', state.markers);
-    console.log('hello from localStorege, cities:', state.citiesFromLocalStorage);
+    console.log('state: currentCity', state.currentCity);
+    console.log('state: currentMarker:', state.currentMarker);
+    console.log('state: cities:', state.cities);
+    console.log('state: markers:', state.markers);
+    console.log('state: cities from localStorage:', state.citiesFromLocalStorage);
   }
 
   /**
@@ -223,27 +242,30 @@ export class WeatherController {
         this._mapView.setView([latitude, longitude]);
         control.layers(this._baseMaps).addTo(this._mapView)
           .setPosition('bottomright');
+
         return { latitude, longitude };
       })
       .then(({ latitude, longitude }) => {
-        weatherModel.readFromLocalStorage(); // update
+        weatherModel.readFromLocalStorage(); // syncs state as well
+
         if (state.citiesFromLocalStorage?.length > 0) {
-          // console.log('hello from localStorage:', cities);
-          // console.log('hello from markers:', this.markers);
+          console.log('hello from localStorage');
+
           state.citiesFromLocalStorage.forEach((weatherData) => {
-            this._renderManyMarkers(weatherData);
+            this._renderAllMarkers(weatherData);
           });
-          // now we render only the last weatherCityCardView
+          const latestCity = state.citiesFromLocalStorage[
+            state.citiesFromLocalStorage.length - 1
+          ];
           this._weatherCardView
             .clearView()
-            .generateMarkup(state.currentCity)
+            .generateMarkup(latestCity)
             .render();
 
-          // we keep track of cities from localstorage
-          // state.cities = cities;
-          // state.currentCity = cities[cities.length - 1];
+          state.currentCity = latestCity;
         } else {
           // if no Data in LocalStorage we fetch data from the apis.
+          console.log('hello from weather API');
           weatherModel.fetchByCoords(latitude, longitude)
             .then((weatherData) => {
               this._renderOneMarker(weatherData);
@@ -251,16 +273,7 @@ export class WeatherController {
                 .clearView()
                 .generateMarkup(weatherData)
                 .render();
-
-              // state.currentCity = weatherData;
-              // this._handleState(weatherData);
-
-              this._logger();
-              return weatherData;
             })
-            // .then((weatherData) => {
-            //   weatherModel.updateLocalStorage([weatherData]);
-            // })
             .catch((error) => {
               this._weatherCardView
                 .clearView()
@@ -270,6 +283,9 @@ export class WeatherController {
       })
       .catch((error) => {
         new MyMapView('#map').showError(error.message);
+      })
+      .finally(() => {
+        this._logger();
       });
   }
 }
