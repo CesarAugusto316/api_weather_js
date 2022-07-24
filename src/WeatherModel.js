@@ -182,10 +182,9 @@ class WeatherModel {
   }
 
   /**
-  * @description if there are duplicates then returns true,
-  * otherwise false, so we can programatically choose to
-  * store a city or not in localStorage.
   *
+  * @description cheks if there are duplicates in
+  * localStorage before any operation.
   * @return boolean
   */
   checkDuplicateCoords() {

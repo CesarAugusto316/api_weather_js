@@ -8,6 +8,7 @@ import { View } from './View.abstract.class';
 export class WeatherCityView extends View {
   /**
    *
+   * @override
    * @param {import('../WeatherModel').WeatherData} weatherData
    * @return this
    */

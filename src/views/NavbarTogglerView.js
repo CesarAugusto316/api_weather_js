@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { View } from './View.abstract.class';
 
 
@@ -10,6 +9,7 @@ import { View } from './View.abstract.class';
  */
 class NavbarMenuView extends View {
   /**
+   *
    * @override
    * @param {Array<import('../WeatherModel').WeatherData>}fromLocalStorage
    */

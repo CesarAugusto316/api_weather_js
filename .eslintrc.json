@@ -11,6 +11,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "max-classes-per-file": "off",
     "consistent-return":"off",
     "no-restricted-globals":"off",
     "no-unused-vars":"off",

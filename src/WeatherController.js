@@ -65,9 +65,14 @@ export class WeatherController {
     }
   }
 
+  /**
+   *
+   * @param {MouseEvent} e
+   */
   _onMenuItemClickHandler(e) {
-    if (e.target.closest('.navbar__menu-item')
-     && !e.target.closest('.fa-trash-can')) {
+    // @ts-ignore
+    if (e.target.closest('.navbar__menu-item') && !e.target.closest('.fa-trash-can')) {
+      // @ts-ignore
       const menuItem = e.target.closest('.navbar__menu-item');
       const { index } = menuItem.dataset;
 
@@ -75,8 +80,14 @@ export class WeatherController {
     }
   }
 
+  /**
+   *
+   * @param {MouseEvent} e
+   */
   _onTrashBtnClickHandler(e) {
+    // @ts-ignore
     if (e.target.closest('.fa-trash-can')) {
+      // @ts-ignore
       const menuItem = e.target.closest('.navbar__menu-item');
       const { index } = menuItem.dataset;
       if (state.citiesFromLocalStorage.length > 1) {
@@ -109,7 +120,7 @@ export class WeatherController {
 
   /**
    *
-   * @description sideEffect function, before writing to localStorage,
+   * @description before writing to localStorage,
    * we first need to read if there is any value in localStorage, so we
    * can not loose our localData.
    *
@@ -188,7 +199,6 @@ export class WeatherController {
           .clearView()
           .generateMarkup(weatherData)
           .render();
-        // this._logger(); // logs newest state
       })
       .catch((error) => {
         this._weatherCardView
@@ -258,27 +268,33 @@ export class WeatherController {
   _flyTo(weatherData, zoom = 9) {
     const { lat, lng } = weatherData;
     this._mapView.flyTo([lat, lng], zoom);
-    state.currentMarker = new Marker({ lat, lng }, { draggable: false });
-    state.markers.forEach((m) => this._mapView.removeLayer(m));
-    state.markers = [state.currentMarker];
+    this._syncMarkers({ lat, lng });
     this._mapView.addLayer(state.currentMarker);
   }
 
   /**
-   * @description sideEffect function, it always keeps only one Marker
-   * in Markers
    *
+   * @description helper function
    * @param {{lat: number, lng: number}} latlng
    */
-  _renderOneMarker({ lat, lng }) {
+  _syncMarkers({ lat, lng }) {
     state.currentMarker = new Marker({ lat, lng }, { draggable: false });
     state.markers.forEach((m) => this._mapView.removeLayer(m)); // removes all previous markers
     state.markers = [state.currentMarker];
+  }
+
+  /**
+   *
+   * @description it always keeps only one Marker
+   * in Markers Array
+   * @param {{lat: number, lng: number}} latlng
+   */
+  _renderOneMarker({ lat, lng }) {
+    this._syncMarkers({ lat, lng });
     this._mapView.addLayer(state.currentMarker).setView([lat, lng]);
   }
 
   /**
-   *  @description sideEffect function
    *
    * @param {{lat: number, lng: number}} latlng
    */
@@ -303,6 +319,7 @@ export class WeatherController {
 
   /**
    *
+   * @description helper function
    * @param {import('./WeatherModel').WeatherData} weatherData
    */
   _renderCardAndMenu(weatherData) {
