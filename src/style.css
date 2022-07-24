@@ -237,9 +237,9 @@ a {
 
 .navbar__heading {
   letter-spacing: -0.6px;
-  margin-left: 3.8rem;
+  margin-left: 1rem;
   display: flex;
-  gap: 0.8rem;
+  gap: 0.2rem;
   align-items: center;
 }
 
@@ -518,7 +518,7 @@ body::-webkit-scrollbar,
   }
 
   .navbar__heading {
-    margin-left: 4rem;
+    margin-left: 2rem;
   }
 
   .form-container {
@@ -571,7 +571,7 @@ body::-webkit-scrollbar,
   }
 
   .navbar__heading {
-    margin-left: 2rem;
+    margin-left: 0rem;
   }
 
   .form {
