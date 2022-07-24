@@ -9,6 +9,6 @@ export class MyMapView extends View {
    */
   constructor(parent) {
     super(parent);
-    this._parentElement = this._$(parent);
+    this._parentElement = this.$(parent);
   }
 }

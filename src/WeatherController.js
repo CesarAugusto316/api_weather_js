@@ -222,7 +222,7 @@ export class WeatherController {
             .clearView()
             .generateMarkup(state.citiesFromLocalStorage)
             .render();
-          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
+          this._navbarTogglerView.navbarMenu.$('.navbar__menu-item--last-item')
             .classList.add('font-succes');
         }, 100);
 
@@ -230,7 +230,7 @@ export class WeatherController {
           this._navbarTogglerView.navbarMenu
             ._parentElement
             .classList.add('hidden');
-          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
+          this._navbarTogglerView.navbarMenu.$('.navbar__menu-item--last-item')
             .classList.remove('font-succes');
         }, 1_400);
 
@@ -351,7 +351,7 @@ export class WeatherController {
       })
       .then(({ latitude, longitude }) => {
         weatherModel.readFromLocalStorage(); // syncs state as well
-
+        // if there are cities in localStorage
         if (state.citiesFromLocalStorage?.length > 0) {
           console.log('hello from localStorage');
 
@@ -361,11 +361,10 @@ export class WeatherController {
           const latestCity = state.citiesFromLocalStorage[
             state.citiesFromLocalStorage.length - 1
           ];
-
           this._renderCardAndMenu(latestCity);
           state.currentCity = latestCity;
         } else {
-          // if no Data in LocalStorage we fetch data from the apis.
+          // if no city is in LocalStorage we fetch data from the apis.
           console.log('hello from weather API');
           weatherModel.fetchByCoords(latitude, longitude)
             .then((weatherData) => {

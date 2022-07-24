@@ -8,11 +8,12 @@ export class FormView extends View {
    */
   constructor(parent) {
     super(parent);
-    this.inputCityCountry = this._$('input.form__input');
-    this.inputSelect = this._$('select.form__input');
+    this.inputCityCountry = this.$('input.form__input');
+    this.inputSelect = this.$('select.form__input');
   }
 
   /**
+   *
    * @param {EventListener} handler
    */
   addSubmitHandler(handler) {
@@ -20,6 +21,7 @@ export class FormView extends View {
   }
 
   /**
+   *
    * @param {EventListener} handler
    */
   addChangeHandler(handler) {
@@ -27,11 +29,12 @@ export class FormView extends View {
   }
 
   /**
+   *
    * @override
    * @param {string} selector
    * @return {HTMLInputElement}
    */
-  _$(selector) {
+  $(selector) {
     return document.querySelector(selector);
   }
 }

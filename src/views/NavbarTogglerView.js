@@ -45,5 +45,5 @@ class NavbarMenuView extends View {
 
 export class NavbarTogglerView extends View {
   navbarMenu = new NavbarMenuView('.navbar__menu');
-  toggleButton = this._$('.nabvar__toggle-botton-CTA');
+  toggleButton = this.$('.nabvar__toggle-botton-CTA');
 }

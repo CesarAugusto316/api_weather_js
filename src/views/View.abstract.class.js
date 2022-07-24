@@ -1,7 +1,7 @@
 /**
  * @description Abstract Class
  *
- * All Views in the App that have state or are rendered onto the screen
+ * All Views in the App that have are rendered onto the screen
  * will inherit from this class, such as WeatherCityView or FormView.
  */
 export class View {
@@ -13,7 +13,7 @@ export class View {
    * @return Element
    */
   constructor(selector) {
-    this._parentElement = this._$(selector);
+    this._parentElement = this.$(selector);
   }
 
   /**
@@ -113,7 +113,7 @@ export class View {
    * @param {string} selector
    * @return {HTMLElement}
    */
-  _$(selector) {
+  $(selector) {
     return document.querySelector(selector);
   }
 }

@@ -21,8 +21,8 @@ const { apiUrl, appId } = openWeatherMaps;
 
 /**
  * @description Global State Object for the entire App,
- * State keeps in Sync with LocalStorage by default, through
- * the WeatherModel instance.
+ * State keeps in Sync with LocalStorage, through
+ * the WeatherModel instance, (Single Source of Truth).
  */
 export const state = {
   /** @type Array<WeatherData> */
@@ -148,9 +148,9 @@ class WeatherModel {
   }
 
   /**
+   *
    * @description When we write to localStorage, we keep localStorage
    * in Sync with the state object.
-   *
    * @param {Array<WeatherData>} newState
    */
   writeToLocalStorage(newState) {
@@ -160,9 +160,9 @@ class WeatherModel {
   }
 
   /**
-   ** @description When we write to localStorage, we keep localStorage
-   * in Sync with the state object.
    *
+   * @description When we write to localStorage, we keep localStorage
+   * in Sync with the state object.
    * @return {Array<WeatherData>}
    */
   readFromLocalStorage() {

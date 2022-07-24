@@ -3,6 +3,7 @@ import { View } from './View.abstract.class';
 
 export class ThemeSelectorView extends View {
   /**
+   *
    * @param {EventListener} handler
    */
   addChangeHandler(handler) {
@@ -10,11 +11,12 @@ export class ThemeSelectorView extends View {
   }
 
   /**
+   *
    * @override
    * @param {string} selector
    * @return {HTMLSelectElement}
    */
-  _$(selector) {
+  $(selector) {
     return document.querySelector(selector);
   }
 }
