@@ -131,6 +131,8 @@ export class WeatherController {
 
   /**
    *
+   * @description moves accross the map, flying from marker
+   * to marker.
    * @param {import('./WeatherModel').WeatherData} weatherData
    */
   _flyTo(weatherData, zoom = 9) {
@@ -153,8 +155,7 @@ export class WeatherController {
 
   /**
    *
-   * @description it always keeps only one Marker
-   * in Markers Array
+   * @description renders only marker onto the map.
    * @param {{lat: number, lng: number}} latlng
    */
   _renderOneMarker({ lat, lng }) {
@@ -163,7 +164,8 @@ export class WeatherController {
   }
 
   /**
-   *
+   * @description renders all markers stored in localStorage
+   * on initial startup.
    * @param {{lat: number, lng: number}} latlng
    */
   _renderAllMarkers({ lat, lng }) {
@@ -174,7 +176,8 @@ export class WeatherController {
 
   /**
    *
-   * @description helper function
+   * @description helper function, wraps the rendering of the navbarMenu
+   * and the weatherCityCardView into one single function.
    * @param {import('./WeatherModel').WeatherData} weatherData
    */
   _renderCardAndMenu(weatherData) {
@@ -193,9 +196,7 @@ export class WeatherController {
   /**
    *
    * @description before writing to localStorage,
-   * we first need to read if there is any value in localStorage, so we
-   * can not loose our localData.
-   *
+   * we first need to read if there is any duplicate value.
    * @param {MouseEvent} e
    */
   _onBookMarkedHandler(e) {
@@ -211,7 +212,6 @@ export class WeatherController {
         cities = [...cities, state.currentCity];
         weatherModel.writeToLocalStorage(cities);
         const newCities = weatherModel.readFromLocalStorage();
-
         this._navbarTogglerView.navbarMenu
           ._parentElement
           .classList.remove('hidden');
@@ -222,7 +222,6 @@ export class WeatherController {
             .clearView()
             .generateMarkup(state.citiesFromLocalStorage)
             .render();
-
           this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
             .classList.add('font-succes');
         }, 100);
@@ -231,7 +230,6 @@ export class WeatherController {
           this._navbarTogglerView.navbarMenu
             ._parentElement
             .classList.add('hidden');
-
           this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
             .classList.remove('font-succes');
         }, 1_400);
@@ -270,7 +268,8 @@ export class WeatherController {
   }
 
   /**
-   *
+   * @description when a saved City is clicked, generates a nice
+   * animation and flies to that city.
    * @param {MouseEvent} e
    */
   _onMenuItemClickHandler(e) {
@@ -279,13 +278,13 @@ export class WeatherController {
       // @ts-ignore
       const menuItem = e.target.closest('.navbar__menu-item');
       const { index } = menuItem.dataset;
-
       this._flyTo(state.citiesFromLocalStorage[index]);
     }
   }
 
   /**
    *
+   * @description removes a saved city from localStorage
    * @param {MouseEvent} e
    */
   _onTrashBtnClickHandler(e) {
