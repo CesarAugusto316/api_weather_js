@@ -98,7 +98,7 @@ class WeatherModel {
         description: weather[0].description,
         icon: weather[0].icon,
       };
-      state.currentCity = weatherData; // handles state
+      state.currentCity = weatherData; // updates state
       return weatherData;
     } catch (error) {
       console.log(error.message);
@@ -138,8 +138,7 @@ class WeatherModel {
         description: weather[0].description,
         icon: weather[0].icon,
       };
-
-      state.currentCity = weatherData; // handles state
+      state.currentCity = weatherData; // updates state
       return weatherData;
     } catch (error) {
       console.log(error.message);
@@ -154,9 +153,9 @@ class WeatherModel {
    * @param {Array<WeatherData>} newState
    */
   writeToLocalStorage(newState) {
-    const cities = JSON.stringify(newState); // handles state
+    const cities = JSON.stringify(newState);
     localStorage.setItem('cities', cities);
-    this.readFromLocalStorage(); // will update our state
+    this.readFromLocalStorage(); // updates state
   }
 
   /**
@@ -168,7 +167,7 @@ class WeatherModel {
   readFromLocalStorage() {
     /** @type Array<WeatherData> */
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
-    state.citiesFromLocalStorage = cities; // handles state
+    state.citiesFromLocalStorage = cities; // updates state
     return cities;
   }
 
@@ -192,13 +191,13 @@ class WeatherModel {
     const objValues = Object.keys(state.currentCity);
     const cities = this.readFromLocalStorage();
 
-    cities.forEach((item) => {
+    cities.forEach((city) => {
       const areEqual = [];
-      Object.keys(item).forEach((key1, index) => {
+      Object.keys(city).forEach((key1, index) => {
         if ((key1 === 'lat' && objValues[index] === 'lat')
          || (key1 === 'lng' && objValues[index] === 'lng')
         ) {
-          if (item[key1] === state.currentCity[objValues[index]]) {
+          if (city[key1] === state.currentCity[objValues[index]]) {
             areEqual.push(true);
           }
         }

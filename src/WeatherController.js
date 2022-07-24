@@ -164,6 +164,7 @@ export class WeatherController {
   }
 
   /**
+   *
    * @description renders all markers stored in localStorage
    * on initial startup.
    * @param {{lat: number, lng: number}} latlng
