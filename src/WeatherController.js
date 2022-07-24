@@ -54,138 +54,6 @@ export class WeatherController {
 
   /**
    *
-   * @param {MouseEvent} e
-   */
-  _onToggleNavbarButton(e) {
-    // @ts-ignore
-    if (e.target.closest('.nabvar__toggle-botton-CTA')) {
-      this._navbarTogglerView.navbarMenu
-        ._parentElement
-        .classList.toggle('hidden');
-    }
-  }
-
-  /**
-   *
-   * @param {MouseEvent} e
-   */
-  _onMenuItemClickHandler(e) {
-    // @ts-ignore
-    if (e.target.closest('.navbar__menu-item') && !e.target.closest('.fa-trash-can')) {
-      // @ts-ignore
-      const menuItem = e.target.closest('.navbar__menu-item');
-      const { index } = menuItem.dataset;
-
-      this._flyTo(state.citiesFromLocalStorage[index]);
-    }
-  }
-
-  /**
-   *
-   * @param {MouseEvent} e
-   */
-  _onTrashBtnClickHandler(e) {
-    // @ts-ignore
-    if (e.target.closest('.fa-trash-can')) {
-      // @ts-ignore
-      const menuItem = e.target.closest('.navbar__menu-item');
-      const { index } = menuItem.dataset;
-      if (state.citiesFromLocalStorage.length > 1) {
-        state.citiesFromLocalStorage = state
-          .citiesFromLocalStorage
-          .filter((city) => city !== state.citiesFromLocalStorage[index]);
-        weatherModel.writeToLocalStorage(state.citiesFromLocalStorage);
-        const cities = weatherModel.readFromLocalStorage();
-        this._renderCardAndMenu(cities[cities.length - 1]);
-        this._renderOneMarker(cities[cities.length - 1]);
-      } else {
-        state.citiesFromLocalStorage = [];
-        weatherModel.writeToLocalStorage(state.citiesFromLocalStorage);
-        weatherModel.getClientLocation()
-          .then(({ latitude, longitude }) => {
-            weatherModel.fetchByCoords(latitude, longitude)
-              .then((weatherData) => {
-                this._renderOneMarker(weatherData);
-                this._renderCardAndMenu(weatherData);
-              })
-              .catch((error) => {
-                this._weatherCardView
-                  .clearView()
-                  .showError(error.message);
-              });
-          });
-      }
-    }
-  }
-
-  /**
-   *
-   * @description before writing to localStorage,
-   * we first need to read if there is any value in localStorage, so we
-   * can not loose our localData.
-   *
-   * @param {MouseEvent} e
-   */
-  _onBookMarkedHandler(e) {
-    // @ts-ignore
-    if (e.target.closest('.fa-bookmark')) {
-      const duplicates = weatherModel.checkDuplicateCoords();
-
-      if (duplicates) {
-        console.log('there are duplicates', duplicates);
-        console.log('we can not store your data 😓.');
-      } else {
-        let cities = weatherModel.readFromLocalStorage();
-        cities = [...cities, state.currentCity];
-        weatherModel.writeToLocalStorage(cities);
-        const newCities = weatherModel.readFromLocalStorage();
-
-        this._navbarTogglerView.navbarMenu
-          ._parentElement
-          .classList.remove('hidden');
-
-        setTimeout(() => {
-          this._navbarTogglerView
-            .navbarMenu
-            .clearView()
-            .generateMarkup(state.citiesFromLocalStorage)
-            .render();
-
-          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
-            .classList.add('font-succes');
-        }, 100);
-
-        setTimeout(() => {
-          this._navbarTogglerView.navbarMenu
-            ._parentElement
-            .classList.add('hidden');
-
-          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
-            .classList.remove('font-succes');
-        }, 1_400);
-
-        console.log('there no are duplicates', duplicates);
-        console.log('we can store your data, 😃, cities added', newCities);
-      }
-    }
-  }
-
-  /**
-   *
-   * @param {HashChangeEvent} e
-   */
-  _onSelectThemeHandler(e) {
-    // @ts-ignore
-    const theme = e.target.value;
-    if (theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else if (theme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
-  }
-
-  /**
-   *
    * @param {import("leaflet").LeafletMouseEvent} e
    */
   _onClickMapHandler(e) {
@@ -306,18 +174,6 @@ export class WeatherController {
 
   /**
    *
-   * @description use during development
-   */
-  _logger() {
-    console.log('state: currentCity', state.currentCity);
-    console.log('state: currentMarker:', state.currentMarker);
-    console.log('state: cities:', state.cities);
-    console.log('state: markers:', state.markers);
-    console.log('state: cities from localStorage:', state.citiesFromLocalStorage);
-  }
-
-  /**
-   *
    * @description helper function
    * @param {import('./WeatherModel').WeatherData} weatherData
    */
@@ -332,6 +188,150 @@ export class WeatherController {
       .clearView()
       .generateMarkup(state.citiesFromLocalStorage)
       .render();
+  }
+
+  /**
+   *
+   * @description before writing to localStorage,
+   * we first need to read if there is any value in localStorage, so we
+   * can not loose our localData.
+   *
+   * @param {MouseEvent} e
+   */
+  _onBookMarkedHandler(e) {
+    // @ts-ignore
+    if (e.target.closest('.fa-bookmark')) {
+      const duplicates = weatherModel.checkDuplicateCoords();
+
+      if (duplicates) {
+        console.log('there are duplicates', duplicates);
+        console.log('we can not store your data 😓.');
+      } else {
+        let cities = weatherModel.readFromLocalStorage();
+        cities = [...cities, state.currentCity];
+        weatherModel.writeToLocalStorage(cities);
+        const newCities = weatherModel.readFromLocalStorage();
+
+        this._navbarTogglerView.navbarMenu
+          ._parentElement
+          .classList.remove('hidden');
+
+        setTimeout(() => {
+          this._navbarTogglerView
+            .navbarMenu
+            .clearView()
+            .generateMarkup(state.citiesFromLocalStorage)
+            .render();
+
+          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
+            .classList.add('font-succes');
+        }, 100);
+
+        setTimeout(() => {
+          this._navbarTogglerView.navbarMenu
+            ._parentElement
+            .classList.add('hidden');
+
+          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
+            .classList.remove('font-succes');
+        }, 1_400);
+
+        console.log('there no are duplicates', duplicates);
+        console.log('we can store your data, 😃, cities added', newCities);
+      }
+    }
+  }
+
+  /**
+   *
+   * @param {HashChangeEvent} e
+   */
+  _onSelectThemeHandler(e) {
+    // @ts-ignore
+    const theme = e.target.value;
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  }
+
+  /**
+   *
+   * @param {MouseEvent} e
+   */
+  _onToggleNavbarButton(e) {
+    // @ts-ignore
+    if (e.target.closest('.nabvar__toggle-botton-CTA')) {
+      this._navbarTogglerView.navbarMenu
+        ._parentElement
+        .classList.toggle('hidden');
+    }
+  }
+
+  /**
+   *
+   * @param {MouseEvent} e
+   */
+  _onMenuItemClickHandler(e) {
+    // @ts-ignore
+    if (e.target.closest('.navbar__menu-item') && !e.target.closest('.fa-trash-can')) {
+      // @ts-ignore
+      const menuItem = e.target.closest('.navbar__menu-item');
+      const { index } = menuItem.dataset;
+
+      this._flyTo(state.citiesFromLocalStorage[index]);
+    }
+  }
+
+  /**
+   *
+   * @param {MouseEvent} e
+   */
+  _onTrashBtnClickHandler(e) {
+    // @ts-ignore
+    if (e.target.closest('.fa-trash-can')) {
+      // @ts-ignore
+      const menuItem = e.target.closest('.navbar__menu-item');
+      const { index } = menuItem.dataset;
+      if (state.citiesFromLocalStorage.length > 1) {
+        state.citiesFromLocalStorage = state
+          .citiesFromLocalStorage
+          .filter((city) => city !== state.citiesFromLocalStorage[index]);
+        weatherModel.writeToLocalStorage(state.citiesFromLocalStorage);
+        const cities = weatherModel.readFromLocalStorage();
+        this._renderCardAndMenu(cities[cities.length - 1]);
+        this._renderOneMarker(cities[cities.length - 1]);
+      } else {
+        state.citiesFromLocalStorage = [];
+        weatherModel.writeToLocalStorage(state.citiesFromLocalStorage);
+        weatherModel.getClientLocation()
+          .then(({ latitude, longitude }) => {
+            weatherModel.fetchByCoords(latitude, longitude)
+              .then((weatherData) => {
+                this._renderOneMarker(weatherData);
+                this._renderCardAndMenu(weatherData);
+              })
+              .catch((error) => {
+                this._weatherCardView
+                  .clearView()
+                  .showError(error.message);
+              });
+          });
+      }
+    }
+  }
+
+  /**
+   *
+   * @description use during development
+   */
+  _logger() {
+    console.log('state: currentCity', state.currentCity);
+    console.log('state: currentMarker:', state.currentMarker);
+    console.log('state: cities:', state.cities);
+    console.log('state: markers:', state.markers);
+    console.log('state: cities from localStorage:', state.citiesFromLocalStorage);
   }
 
   /**
