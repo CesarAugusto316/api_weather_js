@@ -48,7 +48,8 @@ export class WeatherController {
     this._weatherCardView.addClickHandler(this._onBookMarkedHandler.bind(this));
     this._themeSelectorView.addChangeHandler(this._onSelectThemeHandler.bind(this));
     this._navbarTogglerView.addClickHandler(this._onToggleNavbarButton.bind(this));
-    // this._navbarTogglerView.addClickHandler(this._onTrashedHandler.bind(this));
+    this._navbarTogglerView.navbarMenu.addClickHandler(this._onTrashBtnClickHandler.bind(this));
+    this._navbarTogglerView.navbarMenu.addClickHandler(this._onMenuItemClickHandler.bind(this));
   }
 
   /**
@@ -64,15 +65,45 @@ export class WeatherController {
     }
   }
 
-  /**
-   *
-   * @param {MouseEvent} e
-   */
-  _onTrashedHandler(e) {
-    // @ts-ignore
+  _onMenuItemClickHandler(e) {
+    if (e.target.closest('.navbar__menu-item')
+     && !e.target.closest('.fa-trash-can')) {
+      const menuItem = e.target.closest('.navbar__menu-item');
+      const { index } = menuItem.dataset;
+
+      this._flyTo(state.citiesFromLocalStorage[index]);
+    }
+  }
+
+  _onTrashBtnClickHandler(e) {
     if (e.target.closest('.fa-trash-can')) {
-      console.log('I am a trash can');
-      // console.log(this._weatherCardView);
+      const menuItem = e.target.closest('.navbar__menu-item');
+      const { index } = menuItem.dataset;
+      if (state.citiesFromLocalStorage.length > 1) {
+        state.citiesFromLocalStorage = state
+          .citiesFromLocalStorage
+          .filter((city) => city !== state.citiesFromLocalStorage[index]);
+        weatherModel.writeToLocalStorage(state.citiesFromLocalStorage);
+        const cities = weatherModel.readFromLocalStorage();
+        this._renderCardAndMenu(cities[cities.length - 1]);
+        this._renderOneMarker(cities[cities.length - 1]);
+      } else {
+        state.citiesFromLocalStorage = [];
+        weatherModel.writeToLocalStorage(state.citiesFromLocalStorage);
+        weatherModel.getClientLocation()
+          .then(({ latitude, longitude }) => {
+            weatherModel.fetchByCoords(latitude, longitude)
+              .then((weatherData) => {
+                this._renderOneMarker(weatherData);
+                this._renderCardAndMenu(weatherData);
+              })
+              .catch((error) => {
+                this._weatherCardView
+                  .clearView()
+                  .showError(error.message);
+              });
+          });
+      }
     }
   }
 
@@ -97,6 +128,31 @@ export class WeatherController {
         cities = [...cities, state.currentCity];
         weatherModel.writeToLocalStorage(cities);
         const newCities = weatherModel.readFromLocalStorage();
+
+        this._navbarTogglerView.navbarMenu
+          ._parentElement
+          .classList.remove('hidden');
+
+        setTimeout(() => {
+          this._navbarTogglerView
+            .navbarMenu
+            .clearView()
+            .generateMarkup(state.citiesFromLocalStorage)
+            .render();
+
+          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
+            .classList.add('font-succes');
+        }, 100);
+
+        setTimeout(() => {
+          this._navbarTogglerView.navbarMenu
+            ._parentElement
+            .classList.add('hidden');
+
+          this._navbarTogglerView.navbarMenu._$('.navbar__menu-item--last-item')
+            .classList.remove('font-succes');
+        }, 1_400);
+
         console.log('there no are duplicates', duplicates);
         console.log('we can store your data, 😃, cities added', newCities);
       }
@@ -196,7 +252,6 @@ export class WeatherController {
   }
 
   /**
-   * @description sideEffect function
    *
    * @param {import('./WeatherModel').WeatherData} weatherData
    */
@@ -245,6 +300,24 @@ export class WeatherController {
     console.log('state: cities from localStorage:', state.citiesFromLocalStorage);
   }
 
+
+  /**
+   *
+   * @param {import('./WeatherModel').WeatherData} weatherData
+   */
+  _renderCardAndMenu(weatherData) {
+    this._weatherCardView
+      .clearView()
+      .generateMarkup(weatherData)
+      .render();
+
+    this._navbarTogglerView
+      .navbarMenu
+      .clearView()
+      .generateMarkup(state.citiesFromLocalStorage)
+      .render();
+  }
+
   /**
    *
    * @description When the App first loads, it reads 'cities' from
@@ -273,17 +346,8 @@ export class WeatherController {
           const latestCity = state.citiesFromLocalStorage[
             state.citiesFromLocalStorage.length - 1
           ];
-          this._weatherCardView
-            .clearView()
-            .generateMarkup(latestCity)
-            .render();
 
-          this._navbarTogglerView
-            .navbarMenu
-            .clearView()
-            .generateMarkup(state.citiesFromLocalStorage)
-            .render();
-
+          this._renderCardAndMenu(latestCity);
           state.currentCity = latestCity;
         } else {
           // if no Data in LocalStorage we fetch data from the apis.
@@ -291,10 +355,7 @@ export class WeatherController {
           weatherModel.fetchByCoords(latitude, longitude)
             .then((weatherData) => {
               this._renderOneMarker(weatherData);
-              this._weatherCardView
-                .clearView()
-                .generateMarkup(weatherData)
-                .render();
+              this._renderCardAndMenu(weatherData);
             })
             .catch((error) => {
               this._weatherCardView
