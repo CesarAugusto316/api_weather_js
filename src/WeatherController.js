@@ -278,8 +278,15 @@ export class WeatherController {
     if (e.target.closest('.navbar__menu-item') && !e.target.closest('.fa-trash-can')) {
       // @ts-ignore
       const menuItem = e.target.closest('.navbar__menu-item');
+      this._weatherCardView
+        .clearView()
+        .showSpinner();
       const { index } = menuItem.dataset;
       this._flyTo(state.citiesFromLocalStorage[index]);
+      this._weatherCardView
+        .clearView()
+        .generateMarkup(state.citiesFromLocalStorage[index])
+        .render();
     }
   }
 
