@@ -316,7 +316,6 @@ export class WeatherController {
     console.log('state: cities from localStorage:', state.citiesFromLocalStorage);
   }
 
-
   /**
    *
    * @description helper function
