@@ -35,7 +35,7 @@ class NavbarMenuView extends View {
         <div
           class="navbar__menu-item--see-all"
           title="ver todos los marcadores">
-            Ver Todos
+            Ver Todas
         </div>
       `;
     }
